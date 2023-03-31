@@ -2,13 +2,26 @@
 // import { PrismaClient } from '@prisma/client'
 import { prisma } from "/server/db/client"
 
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "./auth/[...nextauth]"
+// import { useRouter } from "next/router"
+
 // const prisma = new PrismaClient()
 
 export default async function handle(req, res) {
   const { method } = req
+  
+  const handleClickProfile = ()=>{
+    router.push('/profile')
+  }
 
   switch (method) {
     case 'POST':
+        const session = await getServerSession(req, res, authOptions)
+    if(!session){
+        res.status(401).json({error:'Unauthorized'})
+        return
+    }
       // get the title and content from the request body
       const { title, content } = req.body
       // use prisma to create a new post using that data
