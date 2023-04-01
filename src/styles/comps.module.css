@@ -48,4 +48,5 @@
     top: 0;
     width: 100vw;
     filter: drop-shadow(0px 6px 0px var(--c5));
+    z-index: 1;
 }

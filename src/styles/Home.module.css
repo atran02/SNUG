@@ -117,6 +117,14 @@
   gap: 1em;
   border-left: solid 0.5em var(--c2);
 }
+.postCard {
+    /* white-space: pre-wrap; */
+    word-break: break-all;
+    /* inline-size: 50%; */
+    overflow-wrap: break-word;
+    /* hyphens: manual; */
+    inline-size: min-content;
+}
 .likesCont{
   display: flex;
   flex-direction: row;

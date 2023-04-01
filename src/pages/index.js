@@ -63,8 +63,14 @@ export default function Home({posts:read}) {
 }
 
 export async function getServerSideProps() {
-  const posts = await prisma.post.findMany()
-
+  const posts = await prisma.post.findMany({
+    orderBy:{
+      createdAt: 'desc'
+    },
+    include: {
+      user: true,
+    }
+  })
   return {
     props: {
       posts: JSON.parse(JSON.stringify(posts)),

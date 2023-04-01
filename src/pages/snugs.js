@@ -7,21 +7,29 @@ import Head from 'next/head'
 import NavBar from '../../comps/navBar'
 import styles from '@/styles/Home.module.css'
 
-export default function Snugs({posts:read}) {
+export default function Snugs({posts:read,id:likes}) {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [posts, setPosts] = useState(read)
+  const [like, setLike] = useState(likes)
 
   // Add a use effect in case the posts change when routing to the home page
   useEffect(() => {
     setPosts(read)
-  }, [read])
+    setLike(likes)
+  }, [read, likes])
   
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async (id) => {
+    // e.preventDefault()
     const res = await axios.post('/api/posts', { title, content })
     setPosts([...read, res.data])
+    // console.log(res.data)
+  }
+  const handleLike = async (id) => {
+    // e.preventDefault()
+    const res = await axios.post('/api/posts/likes', { id })
+    setLike([...read, res.data])
     // console.log(res.data)
   }
 
@@ -38,8 +46,8 @@ export default function Snugs({posts:read}) {
         
         <div className={styles.formCont}>
           <form onSubmit={handleSubmit} className={styles.formStyle}>
-            <input type="text" value={title} placeholder="Post Title..." onChange={(e) => setTitle(e.target.value)} />
-            <textarea value={content} placeholder="What is on your mind?" onChange={(e) => setContent(e.target.value)} />
+            <input type="text" value={title} placeholder="Post Title..." onChange={(id) => setTitle(e.target.value)} />
+            <textarea value={content} placeholder="What is on your mind?" onChange={(id) => setContent(e.target.value)} />
             <button type="submit">Post SNUG!</button>
           </form>
         </div>
@@ -53,7 +61,7 @@ export default function Snugs({posts:read}) {
                     <p>Edit</p>
                     <p>Delete</p>
                 </div>
-                <p className={styles.likes}>10<img src="https://cdn3.emoji.gg/emojis/4459_ComfyBlob.png" width="28px" alt="ComfyBlob"/></p>
+                <p className={styles.likes}>{like}<img onClick={(id)=>handleLike(post.id)}src="https://cdn3.emoji.gg/emojis/4459_ComfyBlob.png" width="28px" alt="ComfyBlob"/></p>
             </div>
           </div>
         ))}
