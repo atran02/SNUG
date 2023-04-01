@@ -28,8 +28,8 @@ export default function Snugs({posts:read,id:likes}) {
   }
   const handleLike = async (id) => {
     // e.preventDefault()
-    const res = await axios.post('/api/posts/likes', { id })
-    setLike([...read, res.data])
+    const res = await axios.post('/api/posts/likes', { postId: id })
+    // setLike([...read, res.data])
     // console.log(res.data)
   }
 
@@ -46,9 +46,9 @@ export default function Snugs({posts:read,id:likes}) {
         
         <div className={styles.formCont}>
           <form onSubmit={handleSubmit} className={styles.formStyle}>
-            <input type="text" value={title} placeholder="Post Title..." onChange={(id) => setTitle(e.target.value)} />
-            <textarea value={content} placeholder="What is on your mind?" onChange={(id) => setContent(e.target.value)} />
-            <button type="submit">Post SNUG!</button>
+            <input type="text" value={title} placeholder="Post Title..." onChange={(id) => setTitle(id.target.value)} />
+            <textarea value={content} placeholder="What is on your mind?" onChange={(id) => setContent(id.target.value)} />
+            <button type="submit">Post My SNUG!</button>
           </form>
         </div>
 

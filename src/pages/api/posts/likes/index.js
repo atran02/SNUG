@@ -1,7 +1,7 @@
 // pages/api/posts.js
 // import { PrismaClient } from '@prisma/client'
-import { prisma } from "../../../../../server/db/client"
-import { getServerSession } from "./../../auth/[...nextauth]"
+import { prisma } from "server/db/client" 
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "./../../auth/[...nextauth]"
 // import { useRouter } from "next/router"
 
@@ -33,11 +33,14 @@ if (!prismaUser){
       const { postId } = req.body
       
   
-      const like = await prisma.like.create({
+      const like = await prisma.likes.create({
         data: {
           postId,
           userId: prismaUser.id,
         },
+        include: {
+            user: true,
+        }, 
       })
       // send the post object back to the client
       res.status(201).json(like)
