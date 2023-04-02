@@ -7,20 +7,19 @@ import Head from 'next/head'
 import NavBar from '../../comps/navBar'
 import styles from '@/styles/Home.module.css'
 
-export default function Snugs({posts:read,id:likes}) {
+export default function Snugs({posts:read}) {
+    console.log(read);
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [posts, setPosts] = useState(read)
-  const [like, setLike] = useState(likes)
 
   // Add a use effect in case the posts change when routing to the home page
   useEffect(() => {
     setPosts(read)
-    setLike(likes)
-  }, [read, likes])
+  }, [read])
   
 
-  const handleSubmit = async (id) => {
+  const handleSubmit = async (e) => {
     // e.preventDefault()
     const res = await axios.post('/api/posts', { title, content })
     setPosts([...read, res.data])
@@ -29,6 +28,8 @@ export default function Snugs({posts:read,id:likes}) {
   const handleLike = async (id) => {
     // e.preventDefault()
     const res = await axios.post('/api/posts/likes', { postId: id })
+    posts.filter((post) => {if(res.data.postId === post.id)post.likes.push(res.data)});
+    setPosts(posts)
     // setLike([...read, res.data])
     // console.log(res.data)
   }
@@ -61,7 +62,7 @@ export default function Snugs({posts:read,id:likes}) {
                     <p>Edit</p>
                     <p>Delete</p>
                 </div>
-                <p className={styles.likes}>{like}<img onClick={(id)=>handleLike(post.id)}src="https://cdn3.emoji.gg/emojis/4459_ComfyBlob.png" width="28px" alt="ComfyBlob"/></p>
+                <p className={styles.likes}>{post.likes.length ? post.likes.length : 0}<img onClick={(id)=>handleLike(post.id)}src="https://cdn3.emoji.gg/emojis/4459_ComfyBlob.png" width="28px" alt="ComfyBlob"/></p>
             </div>
           </div>
         ))}
@@ -71,7 +72,7 @@ export default function Snugs({posts:read,id:likes}) {
 }
 
 export async function getServerSideProps() {
-  const posts = await prisma.post.findMany()
+    const posts = await prisma.post.findMany({include: {likes:true}})
 
   return {
     props: {
