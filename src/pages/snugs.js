@@ -20,7 +20,7 @@ export default function Snugs({posts:read}) {
   
 
   const handleSubmit = async (e) => {
-    // e.preventDefault()
+    e.preventDefault()
     const res = await axios.post('/api/posts', { title, content })
     setPosts([...read, res.data])
     // console.log(res.data)

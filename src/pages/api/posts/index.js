@@ -40,6 +40,9 @@ if (!prismaUser){
           content,
           userId: prismaUser.id,
         },
+        include: {
+            likes: true,
+        }, 
       })
       // send the post object back to the client
       res.status(201).json(post)
