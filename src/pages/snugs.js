@@ -28,7 +28,7 @@ export default function Snugs({posts:read}) {
   const handleLike = async (id) => {
     // e.preventDefault()
     const res = await axios.post('/api/posts/likes', { postId: id })
-    posts.filter((post) => {if(res.data.postId === post.id)post.likes.push(res.data)});
+    await posts.filter((post) => {if(res.data.postId === post.id)post.likes.push(res.data)});
     setPosts(posts)
     // setLike([...read, res.data])
     // console.log(res.data)
